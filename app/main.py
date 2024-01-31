@@ -1,43 +1,50 @@
 from fastapi import FastAPI, HTTPException, status
-import psycopg2
-from psycopg2 import Error
-from dotenv import load_dotenv
+from psycopg2 import DatabaseError, OperationalError, ProgrammingError
+from db.database import create_connection, create_cursor
 import os
+from api.routers import user
 
-# Loading environment varibales
-load_dotenv()
 
 app = FastAPI()
 
-# Connect to PostgreSQL database
-conn = psycopg2.connect(
-    host=os.getenv("DB_HOST"),
-    user=os.getenv("DB_USER"),
-    password=os.getenv("DB_PASSWORD"),
-    database=os.getenv("DB_NAME"),
-)
+# Create a connection
+mydb = create_connection()
+
+# Create a cursor
+mycursor = create_cursor(mydb)
 
 # Execute SQL commands
 def execute_sql_command(command: str):
     try:
-        with conn.cursor() as cursor:
-            cursor.execute(command)
-        conn.commit()
+        mycursor.execute(command)
+        mydb.commit()
         print("Database successfully created")
-    except Error as e:
-        print(f"Error: {e}")
+    except (ProgrammingError, OperationalError, DatabaseError) as e:
+        print(f"Database Error: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Internal Server Error",
         ) from e
 
+
 @app.on_event("startup")
 async def startup_event():
     print(os.getcwd())
 
-    # Initialize tables and data on startup
-    execute_sql_command(open("db/create_tables.sql").read())
+    try:
+        # Initialize tables and data on startup
+        execute_sql_command(open("db/create_tables.sql").read())
+    except Exception as e:
+        # logging the error for debugging
+        print(f"Error during startup: {e}")
+    finally:
+        # Closing the database connection to avoid resource leak
+        mycursor.close()
+        mydb.close()
 
 @app.get("/")
 async def read_root():
     return {"message": "Hello, FastAPI!"}
+
+
+app.include_router(user.router)
