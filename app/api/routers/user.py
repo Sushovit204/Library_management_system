@@ -61,6 +61,10 @@ def list_all_users():
         mycursor.execute(query)
         users = mycursor.fetchall()
 
+        # Check if the result set is empty
+        if not users:
+            return []
+
         # Convert tuples to dictionaries
         user_dicts = [{"name": user[0], "email": user[1], "membership_date": user[2]} for user in users]
         return user_dicts
