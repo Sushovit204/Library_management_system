@@ -24,4 +24,4 @@ To install the project, run the following command:
 ## Usage
 1. Change the working directoy to app
 2. Now run the project using `uvicorn main:app --reload`
-3. Navigate to localhost:8000/docs for swagger API documentation to interact with the API
+3. Navigate to `localhost:8000/docs` for swagger API documentation to interact with the API

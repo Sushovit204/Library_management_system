@@ -5,7 +5,7 @@ from fastapi import HTTPException, status, APIRouter
 from db.database import create_connection, create_cursor
 from typing import List
 
-
+# Router for book api where prefix is url and tags is used for grouping in API documentation
 router = APIRouter(
     prefix="/book",
     tags=["Book"]
@@ -27,6 +27,7 @@ def create_book(book:Books):
         mydb.commit()
         return{"data":"Book Created Successfully"}
     
+    # catching and loging the errors
     except (ProgrammingError, OperationalError, DatabaseError) as e:
         print(f"Database Error: {e}")
         raise HTTPException(
@@ -35,6 +36,7 @@ def create_book(book:Books):
         ) from e
     
     finally:
+        # closing cursor object and database
         mycursor.close()
         mydb.close()
 

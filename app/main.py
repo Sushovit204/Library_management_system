@@ -26,9 +26,11 @@ def execute_sql_command(command: str):
             detail="Internal Server Error",
         ) from e
 
-
+# Running this on startup to create database model if it does not exists
 @app.on_event("startup")
 async def startup_event():
+
+    # for debugging case
     print(os.getcwd())
 
     try:
@@ -44,9 +46,11 @@ async def startup_event():
 
 @app.get("/")
 async def read_root():
+    """Test route for seeing working of the API"""
     return {"message": "Hello, FastAPI!"}
 
 
+# routers for the different API
 app.include_router(user.router)
 app.include_router(book.router)
 app.include_router(borrowed_book.router)

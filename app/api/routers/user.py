@@ -5,7 +5,7 @@ from db.database import create_connection, create_cursor
 import utilis
 from typing import List
 
-
+# Router for book api where prefix is url and tags is used for grouping in API documentation
 router = APIRouter(
     prefix="/user",
     tags=["User"]

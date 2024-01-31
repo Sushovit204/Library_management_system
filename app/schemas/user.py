@@ -8,6 +8,7 @@ class Users(BaseModel):
     membership_date : date
 
 class UsersResponse(BaseModel):
+    """This is for the response model that is for get request"""
     name : str
     email : str
     membership_date : date
