@@ -49,7 +49,7 @@ def create_user(user:Users):
 
 
 # endpoint to list all users
-@router.get("/list", response_model=List[UsersResponse])
+@router.get("/list_users", response_model=List[UsersResponse])
 def list_all_users():
     try:
         # Create a connection
@@ -57,6 +57,8 @@ def list_all_users():
 
         # Create a cursor
         mycursor = create_cursor(mydb)
+
+        # Retrieve all user data
         query = "SELECT name, email, membership_date FROM USERS"
         mycursor.execute(query)
         users = mycursor.fetchall()

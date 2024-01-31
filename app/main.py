@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, status
 from psycopg2 import DatabaseError, OperationalError, ProgrammingError
 from db.database import create_connection, create_cursor
 import os
-from api.routers import user, book
+from api.routers import user, book, borrowed_book
 
 
 app = FastAPI()
@@ -49,3 +49,4 @@ async def read_root():
 
 app.include_router(user.router)
 app.include_router(book.router)
+app.include_router(borrowed_book.router)
