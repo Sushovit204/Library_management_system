@@ -19,6 +19,7 @@ To install the project, run the following command:
 3. Make virtual environment using `py3 -m venv venv`
 4. Activate virtual environment using `Source venv/Scripts/activate`
 5. Install the project dependencies using `pip install -r requirements.txt`
+6. Make '.env' file where you put the database credentials : DB_HOST, DB_USER, DB_PASSWORD, DB_NAME for database host name, user name, password and database name respectively
 
 
 ## Usage
